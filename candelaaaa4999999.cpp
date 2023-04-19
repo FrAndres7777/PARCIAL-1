@@ -5,6 +5,8 @@ using namespace std;
 void vaciararreglo(char* list);
 
 
+
+
 void agregarMateriaLista();
 
 
@@ -47,6 +49,7 @@ void agregarPalabra(char** lista, int longitud , int posicion,int posicionFinal,
 //void  ubicarMateriaEnHorario(char** list, char* materia);
 void  ubicarMateriaEnHorario(char** listLUN,char** listMAR,char** listMIE,char** listJUE,char** listVIE,char** listSAB,char** listDOM, char* materia,char* dia );
 
+void imprimirTodo(char** listaDia,int TAM_LISTA);
 
 void liberarLista(char** lista, int tamLista);
 
@@ -170,18 +173,10 @@ int main(){
 	}
 	//PRUEBA DE IMPRESION
 	 cout << endl << "Lista de palabras:" << endl;
-    for (int i = 0; i < TAM_LISTA; i++) {
-        cout << "Posición " << i << ": ";
-        if (listaLUN[i][0] == '\0') {
-            cout << "(vacío)";
-        } else {
-            cout << listaLUN[i];
-        }
-        cout << endl;
-    }
+   
 	
 	
-	
+	imprimirTodo(listaMAR,TAM_LISTA);
 	
     ///LIBERAR MEMORIA DANGER
 	liberarLista(listaLUN, TAM_LISTA);
@@ -523,45 +518,27 @@ void  ubicarMateriaEnHorario(char** listLUN,char** listMAR,char** listMIE,char**
 			break;
 		case 2:
 			cout<<"caso 2";
-			while(flaghorasss){
-				flaghorasss=posicionesValidas(listMAR,&horaInicio,&horaFinal);
-			}
 			agregarPalabra(listMAR,TAM_LISTA ,horaInicio,horaFinal,materia);
 			break;
 		case 3:
 			cout<<"caso 3";
-			while(flaghorasss){
-				flaghorasss=posicionesValidas(listMIE,&horaInicio,&horaFinal);
-			}
 			agregarPalabra(listMIE,TAM_LISTA ,horaInicio,horaFinal,materia);
 			break;
 			
 		case 4:
 			cout<<"caso 4";
-			while(flaghorasss){
-				flaghorasss=posicionesValidas(listJUE,&horaInicio,&horaFinal);
-			}
 			agregarPalabra(listJUE,TAM_LISTA ,horaInicio,horaFinal,materia);
 			break;
 		case 5:
 			cout<<"caso 5";
-			while(flaghorasss){
-				flaghorasss=posicionesValidas(listVIE,&horaInicio,&horaFinal);
-			}
 			agregarPalabra(listVIE,TAM_LISTA ,horaInicio,horaFinal,materia);
 			break;
 		case 6:
 			cout<<"caso 6";
-			while(flaghorasss){
-				flaghorasss=posicionesValidas(listSAB,&horaInicio,&horaFinal);
-			}
 			agregarPalabra(listSAB,TAM_LISTA ,horaInicio,horaFinal,materia);
 			break;
 		case 7:
 			cout<<"caso 7";
-			while(flaghorasss){
-				flaghorasss=posicionesValidas(listDOM,&horaInicio,&horaFinal);
-			}
 			agregarPalabra(listDOM,TAM_LISTA ,horaInicio,horaFinal,materia);
 			break;
 	}
@@ -608,4 +585,19 @@ void  ubicarMateriaEnHorario(char** listLUN,char** listMAR,char** listMIE,char**
 	
 	
 	cout<<"\n\ncomprobante\n\n";
+}
+
+
+
+// IMPRIMIR LISTA DIA L_M_M_J......
+void imprimirTodo(char** listaDia,int TAM_LISTA){
+	 for (int i = 0; i < TAM_LISTA; i++) {
+        cout << "Posición " << i << ":";
+        if (listaDia[i][0] == '\0') {
+            cout << "(vacío)";
+        } else {
+            cout << listaDia[i];
+        }
+        cout << endl;
+    }
 }
