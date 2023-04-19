@@ -6,7 +6,7 @@ void vaciararreglo(char* list);
 
 void agregarMateriaLista();
 
-void materiastxt(char* arr);
+int materiastxt(char* arr);
 
 void materiaMayus(char* materia);
 
@@ -39,6 +39,12 @@ void imprimirTodo(char** listaDia,int TAM_LISTA);
 void liberarLista(char** lista, int tamLista);
 
 void imprimirHORARIO(char** listLUN,char** listMAR,char** listMIE,char** listJUE,char** listVIE,char** listSAB,char** listDOM,int TAM_LISTA);
+
+int espacioVacios(char** listaDia,int TAM_LISTA);
+
+int listaConMasVacios(char** listLUNES,char** listMARTES,char** listMIERCOLES,char** listJUEVES,char** listVIERNES,char** listSABADO,char** listDOMINGO);
+
+void contarPalabra(char* palabra);
 
 
 
@@ -88,19 +94,27 @@ int main(){
     }
     cout<<"\nINGRESA NUMERO DE MATERIAS: ";
     cin>> numeroMaterias;
+    int listaCreditos[numeroMaterias];
     char materia[100];
     vaciararreglo(materia);
     char listaMaterias[1][numeroMaterias][100];
     cin.ignore();//Ignorar el salto de linea pendiente despues de la entrada anterior
+    int credito;
     for(int i = 0 ; i < numeroMaterias ; i++){
         cout<<"\t\tPOR FAVOR INGRESA MATERIA "<< ":\t";
         vaciararreglo(listaMaterias[0][i]);
         cin.getline(listaMaterias[0][i],100); // permitir espacios al ingresar la materia
-        materiastxt(listaMaterias[0][i]);
+        credito = materiastxt(listaMaterias[0][i]);
+        listaCreditos[i]=credito;
     }
     // IMPRIMIR MATERIAS MI PEZ
     cout<<"SE REGISTRARON TUS MATERIAS:\n\n";
+    for(int cr = 0 ; cr < numeroMaterias;cr++){
+    	
+    	cout<<listaCreditos[cr];
+	}
     for(int iii = 0 ; iii< numeroMaterias;iii++){
+    	contarPalabra(listaMaterias[0][iii]);
     	/////
     	cout<<" _________________\n";
     	cout<<"||  "<<listaMaterias[0][iii]<<"  ||"<<endl;
@@ -166,6 +180,31 @@ int main(){
 	
 	///////imprimirTodo(listaMAR,TAM_LISTA);
 	imprimirHORARIO(listaLUN,listaMAR, listaMIE, listaJUE, listaVIE, listaSAB, listaDOM, TAM_LISTA);
+	int horasTotalCreditos=0;
+	for(int cr = 0 ; cr < numeroMaterias;cr++){
+		cout<<(listaCreditos[cr]*48)/16<<endl;
+    	horasTotalCreditos+=(listaCreditos[cr]*48)/16;
+	}
+	cout<<horasTotalCreditos;
+	cout<<endl;
+	int horasvaciasss=0;
+	int horasDeEstudio=0;
+	horasvaciasss+=espacioVacios(listaLUN, TAM_LISTA);
+	horasvaciasss+=espacioVacios(listaMAR, TAM_LISTA);
+	horasvaciasss+=espacioVacios(listaMIE, TAM_LISTA);
+	horasvaciasss+=espacioVacios(listaJUE, TAM_LISTA);
+	horasvaciasss+=espacioVacios(listaVIE, TAM_LISTA);
+	horasvaciasss+=espacioVacios(listaSAB, TAM_LISTA);
+	horasvaciasss+=espacioVacios(listaDOM, TAM_LISTA);
+	
+	horasDeEstudio=119-horasvaciasss;
+	cout<<"TUS HORAS DE ESTUDIO SON: "<<horasDeEstudio;
+	cout<<"TE HACEN FALTA :  "<<horasTotalCreditos-horasDeEstudio<<endl;
+	
+	cout<<"EL DIA CON MAS ESPACIOS ES "<<endl<<endl;
+	cout<<listaConMasVacios(listaLUN,listaMAR, listaMIE, listaJUE, listaVIE, listaSAB, listaDOM);
+	cout<<"EL DIA CON MAS ESPACIOS ES "<<endl<<endl;
+
 	
     ///LIBERAR MEMORIA DANGER
 	liberarLista(listaLUN, TAM_LISTA);
@@ -176,6 +215,7 @@ int main(){
     liberarLista(listaSAB, TAM_LISTA);
     liberarLista(listaDOM, TAM_LISTA);
     ///LIBERAR MEMORIA DANGER
+    
     
     return 0;
 }
@@ -199,64 +239,60 @@ void agregarMateriaLista(char* materia, char* materLista){
 
 
 //Funcion comprovar si una materia es lista de materias
-void materiastxt(char* list) {
+int materiastxt(char* list) {
     char arr[100];
     int i = 0;
-    bool materiaEsta= false;
+    bool materiaEsta = false;
+    char credito;
+    
     // Abrir el archivo
     ifstream file("Materias.txt");
     materiaMayus(list);
     
-    while (file.is_open() and materiaEsta==false) {
+    while (file.is_open() && !materiaEsta) {
         // Leer línea por línea
-        while (!file.eof()) {
+        while (!file.eof() && !materiaEsta) {
             // Leer la línea
             char line[100];
             vaciararreglo(arr);
             file.getline(line, 100);
             
+            
             // Recorrer la línea hasta la coma
             for (int j = 0; line[j] != ',' && line[j] != '\0'; j++) {
                 arr[i++] = line[j];
+                credito=line[j+2];
             }
-            // Agregar un carácter nulo al final del arreglo
+            // Agregar un caracter nulo al final del arreglo
             arr[i] = '\0';
             
             // Imprimir el arreglo resultante
-            materiaEsta=arrIguales(list,arr);
-            int numDias;
-            int horaInicio;
-            int horaFinal;
-            int opcionMatReg;
-            //MATERIAS
-            //MATERIAS
-            // Crear la lista de palabras vacía
-    		
+            materiaEsta = arrIguales(list, arr);
             
-            
-            ///
-            if(materiaEsta==true){
-            	file.close();
-            	return;
-			}
+            if (materiaEsta) {
+            	cout<<"CREDITOS "<<credito<<endl;
+                file.close();
+                return (credito -48);
+            }
             
             // Reiniciar el contador
             i = 0;
         }
         
-        // Cerrar el archivo
-        if(materiaEsta==false){
-        	cout<<"\t\t\tINGRESA MATERIA VALIDA:";
-        	cin.getline(list,100);
-        	materiaMayus(list);
-        	file.seekg(0);
-        	
-		}else{
-			file.close();
-			return;
-		}
-        
+        // Verificar si se llego al final del archivo y la materia aun no se ha encontrado
+        if (file.eof() && !materiaEsta) {
+            cout << "\t\t\tMATERIA NO ENCONTRADA, INGRESA UNA MATERIA VALIDA: ";
+            cin.getline(list, 100);
+            materiaMayus(list);
+            file.clear();  // Limpiar los indicadores de error del archivo
+            file.seekg(0); // Reiniciar la posicion de lectura del archivo al principio
+        }
     }
+    
+    // Cerrar el archivo
+    
+    file.close();
+    return credito -48;
 }
 
 void materiaMayus(char* materia){
@@ -619,6 +655,103 @@ void imprimirHORARIO(char** listLUN,char** listMAR,char** listMIE,char** listJUE
     }
     
 }
+
+
+// CANTOR ESPACIOS DE LISTA
+
+int espacioVacios(char** listaDia,int TAM_LISTA){
+	int vacios=0;
+	 for (int i = 0; i < TAM_LISTA; i++) {
+        if (listaDia[i][0] == '\0') {
+        	vacios++;
+        } 
+    }
+    cout<<vacios<<"  ";
+    return vacios;
+}
+///veces que esta materia en horario;
+void contarPalabra(char* palabra) {
+    ifstream archivo("RR35.txt");
+    if (archivo) {
+        int contador = 0;
+        char linea[100];
+        while (archivo.getline(linea, 100)) {
+            int i = 0, j = 0;
+            bool coincidencia = true;
+            while (palabra[i] != '\0' && linea[j] != '\0') {
+                if (palabra[i] != linea[j]) {
+                    coincidencia = false;
+                    break;
+                }
+                i++;
+                j++;
+            }
+            if (coincidencia && palabra[i] == '\0') {
+                contador++;
+            }
+        }
+        archivo.close();
+        cout << "La palabra aparece " << contador << " veces en el archivo." << endl;
+    } else {
+        cout << "No se pudo abrir el archivo." << endl;
+        
+    }
+}
+
+///funcion para encontrar la lista de dias con mas vacios
+int listaConMasVacios(char** listLUNES,char** listMARTES,char** listMIERCOLES,char** listJUEVES,char** listVIERNES,char** listSABADO,char** listDOMINGO) {
+    int masVacios = 0;
+    int diaMasVacios = 0;
+    int vacios;
+
+    vacios = espacioVacios(listLUNES, 24);
+    if (vacios > masVacios) {
+        masVacios = vacios;
+        diaMasVacios = 1;
+    }
+
+    vacios = espacioVacios(listMARTES, 24);
+    if (vacios > masVacios) {
+        masVacios = vacios;
+        diaMasVacios = 2;
+    }
+
+    vacios = espacioVacios(listMIERCOLES, 24);
+    if (vacios > masVacios) {
+        masVacios = vacios;
+        diaMasVacios = 3;
+    }
+
+    vacios = espacioVacios(listJUEVES, 24);
+    if (vacios > masVacios) {
+        masVacios = vacios;
+        diaMasVacios = 4;
+    }
+
+    vacios = espacioVacios(listVIERNES, 24);
+    if (vacios > masVacios) {
+        masVacios = vacios;
+        diaMasVacios = 5;
+    }
+
+    vacios = espacioVacios(listSABADO, 24);
+    if (vacios > masVacios) {
+        masVacios = vacios;
+        diaMasVacios = 6;
+    }
+
+    vacios = espacioVacios(listDOMINGO, 24);
+    if (vacios > masVacios) {
+        masVacios = vacios;
+        diaMasVacios = 7;
+    }
+
+    return diaMasVacios;
+}
+
+
+
+
 
 
 
