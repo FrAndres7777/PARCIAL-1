@@ -4,35 +4,24 @@ using namespace std;
 
 void vaciararreglo(char* list);
 
-
-
-
 void agregarMateriaLista();
-
 
 void materiastxt(char* arr);
 
-
 void materiaMayus(char* materia);
-
 
 bool arrIguales(char* arr1,char*arr2);
 
-
 int obtenerNumeroDia(char* dia);
-
 
 void horasValidas(int* a , int* b);
 
-
 void inicializarLista(char** lista, int tamLista, int tamPalabra);
-
 
 const int TAM_LISTA = 24;
 const int TAM_PALABRA = 25;
 
 bool comprobarPosicion(char** lista, int longitud,int posicion);
-
 
 bool posicionesValidas(char** lista___,int* horaI,int* HoraF);
 
@@ -40,11 +29,7 @@ void seleccionarHoras(int *horaInicio, int *horaFinal);
 
 void agregarPalabra(char** lista, int longitud , int posicion,int posicionFinal,char* palabra);
 
-
-
-
-
-
+void agregarDormir(char** lista, int longitud , int horaInicio,int horaFinal,char* palabra);
 
 //void  ubicarMateriaEnHorario(char** list, char* materia);
 void  ubicarMateriaEnHorario(char** listLUN,char** listMAR,char** listMIE,char** listJUE,char** listVIE,char** listSAB,char** listDOM, char* materia,char* dia );
@@ -53,7 +38,7 @@ void imprimirTodo(char** listaDia,int TAM_LISTA);
 
 void liberarLista(char** lista, int tamLista);
 
-
+void imprimirHORARIO(char** listLUN,char** listMAR,char** listMIE,char** listJUE,char** listVIE,char** listSAB,char** listDOM,int TAM_LISTA);
 
 
 
@@ -73,18 +58,27 @@ int main(){
 	inicializarLista(listaVIE, TAM_LISTA, TAM_PALABRA);
 	inicializarLista(listaSAB, TAM_LISTA, TAM_PALABRA);
 	inicializarLista(listaDOM, TAM_LISTA, TAM_PALABRA);
+	int horaInicioSueno=0,horaFinalSueno=7;
+	char sueno[TAM_PALABRA] ="DORMIR";
+	agregarDormir(listaLUN,TAM_LISTA ,horaInicioSueno,horaFinalSueno,sueno);
+	agregarDormir(listaMAR,TAM_LISTA ,horaInicioSueno,horaFinalSueno,sueno);
+	agregarDormir(listaMIE,TAM_LISTA ,horaInicioSueno,horaFinalSueno,sueno);
+	agregarDormir(listaJUE,TAM_LISTA ,horaInicioSueno,horaFinalSueno,sueno);
+	agregarDormir(listaVIE,TAM_LISTA ,horaInicioSueno,horaFinalSueno,sueno);
+	agregarDormir(listaSAB,TAM_LISTA ,horaInicioSueno,horaFinalSueno,sueno);
+	agregarDormir(listaDOM,TAM_LISTA ,horaInicioSueno,horaFinalSueno,sueno);
+	
 	///
 	
-    
 	//DANGER
 	char matDias[1][3][100];//dias para el ciclo de pedir horario de hora se guardaran los dias
 	//PENDIENTE VACIAS A MATDIAS POSIBLE ERROR 
     char name[100];
     int  numeroMaterias;
-    cout<<"Ingresa tu nombre: ";
+    cout<<"INGRESA TU NAME: ";
     cin.getline(name,100);
     materiaMayus(name);
-    cout<<"Hola ";
+    cout<<"HI ";
     for(int i =0; name[i]!='\0'; i++){
         cout<<name[i];
     }
@@ -92,31 +86,33 @@ int main(){
     for(int i =0; name[i]!='\0'; i++){
         cout<<name[i];
     }
-    cout<<"\nIngresa Numero de Materias: ";
+    cout<<"\nINGRESA NUMERO DE MATERIAS: ";
     cin>> numeroMaterias;
     char materia[100];
     vaciararreglo(materia);
     char listaMaterias[1][numeroMaterias][100];
     cin.ignore();//Ignorar el salto de linea pendiente despues de la entrada anterior
     for(int i = 0 ; i < numeroMaterias ; i++){
-        cout<<"\t\tPor Favor Ingresa Materia "<< ":\t";
+        cout<<"\t\tPOR FAVOR INGRESA MATERIA "<< ":\t";
         vaciararreglo(listaMaterias[0][i]);
         cin.getline(listaMaterias[0][i],100); // permitir espacios al ingresar la materia
         materiastxt(listaMaterias[0][i]);
     }
     // IMPRIMIR MATERIAS MI PEZ
-    cout<<"Se registraron tus Materias:\n";
+    cout<<"SE REGISTRARON TUS MATERIAS:\n\n";
     for(int iii = 0 ; iii< numeroMaterias;iii++){
     	/////
+    	cout<<" _________________\n";
+    	cout<<"||  "<<listaMaterias[0][iii]<<"  ||"<<endl;
+    	cout<<" _________________\n\n";
     	
-    	cout<<listaMaterias[0][iii]<<endl;
     	
     	int numDias,opcionMatReg;
 		///quite hora inicio y final
 		// UN NUMERO PARA SABER PARA QUE DIA ESTA ITERANDO Y SABER A QUE LIST___ LLENAR
 		int indicadorDiaList;// PENDIENTYE PUEDE DAR UN ERROR
 		//
-		cout<<"INGRESA DATOS DE MATERIA DIAS:\n\tMartes-Jueves[1]\n\tMiercoles - Viernes[2]\n\tHorario Diferente [3]\n";
+		cout<<"INGRESA DATOS DE MATERIA\n\t   DIAS:\n\t\tMartes-Jueves[1]\n\t\tMiercoles - Viernes[2]\n\t\tHorario Diferente [3]\n";
         cin>>opcionMatReg;
         while(opcionMatReg>3 or opcionMatReg < 1){
         	cout<<"Elige opcion Valida ";
@@ -144,12 +140,12 @@ int main(){
 					
 		}else{
 			cin.ignore();
-			cout<<"Ingresa Numero dias: ";
+			cout<<"INGRESA NUMERO DE DIAS: ";
 			cin>>numDias;
 			cin.ignore();
 			char matDias[1][3][100]={{"", "", ""}};;
 			for(int i = 0; i < numDias ;i++){
-				cout<<"\nIngresa Dias ";
+				cout<<"\nINGRESA DIA:  ";
 				cin.getline(matDias[0][i],25);
 				materiaMayus(matDias[0][i]);
 				obtenerNumeroDia(matDias[0][i]);
@@ -162,21 +158,14 @@ int main(){
        			
     			}
 			}
-		
-        //FUNCIONA.ubicarMateriaEnHorario(listaLUN,listaMaterias[0][i]) ; 
-        /////
-        
-        //ubicarMateriaEnHorario(listaLUN,listaMAR,listaMIE,listaJUE,listaVIE,listaSAB,listaDOM,listaMaterias[0][i],matDias);
-        
-        
     
 	}
 	//PRUEBA DE IMPRESION
-	 cout << endl << "Lista de palabras:" << endl;
-   
+   	
 	
 	
-	imprimirTodo(listaMAR,TAM_LISTA);
+	///////imprimirTodo(listaMAR,TAM_LISTA);
+	imprimirHORARIO(listaLUN,listaMAR, listaMIE, listaJUE, listaVIE, listaSAB, listaDOM, TAM_LISTA);
 	
     ///LIBERAR MEMORIA DANGER
 	liberarLista(listaLUN, TAM_LISTA);
@@ -257,7 +246,7 @@ void materiastxt(char* list) {
         
         // Cerrar el archivo
         if(materiaEsta==false){
-        	cout<<"\t\t\tIngresa Materia Valida:";
+        	cout<<"\t\t\tINGRESA MATERIA VALIDA:";
         	cin.getline(list,100);
         	materiaMayus(list);
         	file.seekg(0);
@@ -302,7 +291,7 @@ bool arrIguales(char* arr1,char*arr2) {
 	}
     // Imprimir el resultado
     if (equal) {
-        cout << "\t\t\tMateria Registrada" << endl;
+        cout << "\t\t\tMATERIAS REGISTRADA\n" << endl;
         return true;
     } else {
         return false;
@@ -352,7 +341,7 @@ int obtenerNumeroDia(char* dia) {
 		}
         
     }
-    cout<<"Error Ingrese Dia Nuevamente : ";
+    cout<<"ERROR INGRESE DIA NUEVAMENTE: ";
     cin.getline(dia,25);
     return obtenerNumeroDia(dia);
 }
@@ -379,7 +368,7 @@ void liberarLista(char** lista, int tamLista) {
 // comprobar la pocicon de las horas que se van a ingresar a las listas  dias
 bool comprobarPosicion(char** lista, int longitud,int posicion){
 	if (lista[posicion][0] != '\0' or posicion> longitud) {
-        cout<< "Esa posición ya está ocupada. Por favor ingrese otra." << endl;
+        cout<< "POSION OCUPADA POR FAVOR INGRESE NUEVAMENTE." << endl;
         return false;
     }else{
     	return true;
@@ -387,7 +376,7 @@ bool comprobarPosicion(char** lista, int longitud,int posicion){
 }
 ///formato de horas valido inicio y fin
 void horasValidas(int* a , int* b){
-	if(*a>*b){
+	if(*a>*b or *b >23 or *a< 0){
 		cout<<"Formato Invalido\n\t Ingresa Hora de Inicio ";
 		cin>>*a;
 		cout<<"Formato Invalido\n\t Ingresa Hora Final ";
@@ -396,7 +385,6 @@ void horasValidas(int* a , int* b){
 		
 		
 	}else{
-		cout<<"Horas Validas ";
 		return ;
 	}
 }
@@ -489,14 +477,25 @@ void agregarPalabra(char** lista, int longitud , int horaInicio,int horaFinal,ch
     
 }
 
-
+///dormir
+void agregarDormir(char** lista, int longitud , int horaInicio,int horaFinal,char* palabra) {
+   while(horaInicio< horaFinal){
+   	 // Copiar la palabra en la lista
+   	int i = 0;
+    while (i < TAM_PALABRA && palabra[i] != '\0') {
+        lista[horaInicio][i] = palabra[i];
+        i++;
+    }
+    lista[horaInicio][i] = '\0';
+    horaInicio++;
+   	
+   	
+   }
+    
+}
 
 
 ///
-
-
-
-
 
 ///FUNCION PARA RECIBIR (LISTA DE DIAS 24HORAS) NOMBRE DE MATERIA HORA 
 void  ubicarMateriaEnHorario(char** listLUN,char** listMAR,char** listMIE,char** listJUE,char** listVIE,char** listSAB,char** listDOM, char* materia,char* dia){
@@ -506,7 +505,6 @@ void  ubicarMateriaEnHorario(char** listLUN,char** listMAR,char** listMIE,char**
 	int opcion;
 	bool flagPosicion=true;
 	bool flaghorasss=true;
-	cout<<endl<<materia<<endl;
 	///ubicamos la lista _ _ _ con indiceDia
 	indiceDia= obtenerNumeroDia(dia);
 	
@@ -542,48 +540,6 @@ void  ubicarMateriaEnHorario(char** listLUN,char** listMAR,char** listMIE,char**
 			agregarPalabra(listDOM,TAM_LISTA ,horaInicio,horaFinal,materia);
 			break;
 	}
-    
-    
-    /*
-    int posicion;
-    ///ESPACION DE HORA VALIDAS DISPONIBLE
-    while(flagPosicion){
-    	flagPosicion = false;
-    	copiInicio=horaInicio;
-    	copiFinal= horaFinal;
-    	while(copiInicio< copiFinal){
-    	cout<<copiInicio<<endl;
-    	posicion=copiInicio;
-    	}
-    	
-	}
-    
-    
-    
-    
-    ///se va por las pociciones de inicio hasta fin para cada num escribimos la materia
-    while(horaInicio< horaFinal){
-    	cout<<horaInicio<<endl;
-    	posicion=horaInicio;
-    	int i2=0;
-    	while (materia[i2] != '\0') {
-        listLUN[posicion][i2] = materia[i2];
-        i2++;
-    	}
-    	listLUN[posicion][i2] = '\0';
-    	horaInicio++;
-	}
-    */
-    
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	cout<<"\n\ncomprobante\n\n";
 }
 
@@ -591,13 +547,78 @@ void  ubicarMateriaEnHorario(char** listLUN,char** listMAR,char** listMIE,char**
 
 // IMPRIMIR LISTA DIA L_M_M_J......
 void imprimirTodo(char** listaDia,int TAM_LISTA){
+	ofstream archivo("RR35.txt", std::ios::app); // abrir el archivo en modo "append"
+    
+    if (archivo.is_open()) {
+        
+        
+    } else {
+        cout << "No se pudo abrir el archivo" << std::endl;
+    }
 	 for (int i = 0; i < TAM_LISTA; i++) {
         cout << "Posición " << i << ":";
         if (listaDia[i][0] == '\0') {
-            cout << "(vacío)";
+            cout << "______";
         } else {
             cout << listaDia[i];
+            archivo << listaDia[i] << endl;
         }
         cout << endl;
     }
+    archivo.close(); // cerrar el archivo
 }
+
+
+void imprimirHORARIO(char** listLUN,char** listMAR,char** listMIE,char** listJUE,char** listVIE,char** listSAB,char** listDOM,int TAM_LISTA){
+
+	 for (int i = 0; i < TAM_LISTA; i++) {
+        cout << "HORA : " << i << ":";
+        if (listLUN[i][0] == '\0') {
+            cout << "___________   ";
+        } else {
+            cout << listLUN[i]<<"   ";
+            
+        }
+        if (listMAR[i][0] == '\0') {
+            cout << "__________   ";
+        } else {
+            cout << listMAR[i]<<"   ";
+            
+        }
+        if (listMIE[i][0] == '\0') {
+            cout << "__________   ";
+        } else {
+            cout << listMIE[i]<<"   ";
+            
+        }
+        if (listJUE[i][0] == '\0') {
+            cout << "__________   ";
+        } else {
+            cout << listJUE[i]<<"   ";
+            
+        }
+        if (listVIE[i][0] == '\0') {
+            cout << "__________   ";
+        } else { 
+            cout << listVIE[i]<<"   ";
+            
+        }
+        if (listSAB[i][0] == '\0') {
+            cout << "__________   ";
+        } else {
+            cout << listSAB[i]<<"   ";
+            
+        }
+        if (listDOM[i][0] == '\0') {
+            cout << "__________   ";
+        } else {
+            cout << listDOM[i]<<"   ";
+            
+        }
+        cout << endl;
+    }
+    
+}
+
+
+
