@@ -4,26 +4,43 @@ using namespace std;
 
 void vaciararreglo(char* list);
 
+
 void agregarMateriaLista();
+
 
 void materiastxt(char* arr);
 
+
 void materiaMayus(char* materia);
+
 
 bool arrIguales(char* arr1,char*arr2);
 
+
 int obtenerNumeroDia(char* dia);
+
 
 void horasValidas(int* a , int* b);
 
+
 void inicializarLista(char** lista, int tamLista, int tamPalabra);
+
 
 const int TAM_LISTA = 24;
 const int TAM_PALABRA = 25;
 
 bool comprobarPosicion(char** lista, int longitud,int posicion);
 
-void agregarPalabra(char** lista, int longitud);
+
+bool posicionesValidas(char** lista___,int* horaI,int* HoraF);
+
+void seleccionarHoras(int *horaInicio, int *horaFinal);
+
+void agregarPalabra(char** lista, int longitud , int posicion,int posicionFinal,char* palabra);
+
+
+
+
 
 
 
@@ -109,7 +126,8 @@ int main(){
 				for(int i = 0; matDias[0][i][0]!= '\0' ; i++){
         			cout<<endl<<matDias[0][i]<<endl;
         			indicadorDiaList=obtenerNumeroDia(matDias[0][i]);
-        			cout<<indicadorDiaList;
+        			ubicarMateriaEnHorario(listaLUN,listaMAR,listaMIE,listaJUE,listaVIE,listaSAB,listaDOM,listaMaterias[0][iii],matDias[0][i]);
+        			
     					}
 			}else if(opcionMatReg==2){
 					char matDias[1][3][25]= {{"MIERCOLES", "VIERNES", ""}};//dias para el ciclo de pedir horario de hora se guardaran los dias
@@ -126,10 +144,11 @@ int main(){
 			cout<<"Ingresa Numero dias: ";
 			cin>>numDias;
 			cin.ignore();
-			char matDias[1][3][100];
+			char matDias[1][3][100]={{"", "", ""}};;
 			for(int i = 0; i < numDias ;i++){
 				cout<<"\nIngresa Dias ";
 				cin.getline(matDias[0][i],25);
+				materiaMayus(matDias[0][i]);
 				obtenerNumeroDia(matDias[0][i]);
 				
 				}
@@ -149,6 +168,21 @@ int main(){
         
     
 	}
+	//PRUEBA DE IMPRESION
+	 cout << endl << "Lista de palabras:" << endl;
+    for (int i = 0; i < TAM_LISTA; i++) {
+        cout << "Posición " << i << ": ";
+        if (listaLUN[i][0] == '\0') {
+            cout << "(vacío)";
+        } else {
+            cout << listaLUN[i];
+        }
+        cout << endl;
+    }
+	
+	
+	
+	
     ///LIBERAR MEMORIA DANGER
 	liberarLista(listaLUN, TAM_LISTA);
     liberarLista(listaMAR, TAM_LISTA);
@@ -187,7 +221,7 @@ void materiastxt(char* list) {
     bool materiaEsta= false;
     // Abrir el archivo
     ifstream file("Materias.txt");
-	
+    materiaMayus(list);
     
     while (file.is_open() and materiaEsta==false) {
         // Leer línea por línea
@@ -230,6 +264,7 @@ void materiastxt(char* list) {
         if(materiaEsta==false){
         	cout<<"\t\t\tIngresa Materia Valida:";
         	cin.getline(list,100);
+        	materiaMayus(list);
         	file.seekg(0);
         	
 		}else{
@@ -371,6 +406,94 @@ void horasValidas(int* a , int* b){
 	}
 }
 
+///funcion ELEGIR HORA INICIO Y FINAL
+void seleccionarHoras(int *horaInicio, int *horaFinal) {
+    int opcion;
+    do {
+        cout << "Seleccione Horas\n\t 8-10 [1]\n\t 10-12[2]\n\t 12-14[3]\n\t 14-16[4]\n\t 16-18[5]\n\t Otro[6]\n";
+        cin >> opcion;
+        switch (opcion) {
+            case 1:
+                *horaInicio = 8;
+                *horaFinal = 10;
+                break;
+            case 2:
+                *horaInicio = 10;
+                *horaFinal = 12;
+                break;
+            case 3:
+                *horaInicio = 12;
+                *horaFinal = 14;
+                break;
+            case 4:
+                *horaInicio = 14;
+                *horaFinal = 16;
+                break;
+            case 5:
+                *horaInicio = 16;
+                *horaFinal = 18;
+                break;
+            case 6:
+                cout << "Ingrese la hora inicial: ";
+                cin >> *horaInicio;
+                cout << "Ingrese la hora final: ";
+                cin >> *horaFinal;
+                horasValidas(horaInicio, horaFinal);
+                break;
+            default:
+                cout << "Opcion invalida, intente de nuevo." << endl;
+                break;
+        }
+        
+    } while (*horaInicio == 0 || *horaFinal == 0);
+    
+    cout << "Hora inicio: " << *horaInicio << endl;
+    cout << "Hora final: " << *horaFinal << endl;
+}
+
+///comprobar una pocion en las lista _ _ _
+bool posicionesValidas(char** lista___,int* horaI,int* horaF){
+	bool flagPosicion=true;
+	int copiInicio,copiFinal,posicion;
+	while(flagPosicion){
+    	flagPosicion = false;
+    	copiInicio=*horaI;
+    	copiFinal= *horaF;
+    	while(copiInicio< copiFinal){
+    		posicion=copiInicio;
+    		copiInicio++;
+    		if(lista___[posicion][0] != '\0'){
+    			flagPosicion=true;
+			}
+    	}
+    	if(flagPosicion==true){
+    		cout<<"\nEL RANGO DE HORAS YA ESTA OCUPADO\n\t  INGRESE HORAS NUEVAMENTE  :";
+    		seleccionarHoras(horaI, horaF);
+    		
+		}
+    	
+	}return false;
+	
+}
+
+///ya se verifico rango d hora entonse se ingresara escribira la materia en el indice dias
+void agregarPalabra(char** lista, int longitud , int horaInicio,int horaFinal,char* palabra) {
+   posicionesValidas(lista,&horaInicio,&horaFinal);
+   while(horaInicio< horaFinal){
+   	 // Copiar la palabra en la lista
+   	int i = 0;
+    while (i < TAM_PALABRA && palabra[i] != '\0') {
+        lista[horaInicio][i] = palabra[i];
+        i++;
+    }
+    lista[horaInicio][i] = '\0';
+    horaInicio++;
+   	
+   	
+   }
+    
+}
+
 
 
 
@@ -383,52 +506,97 @@ void horasValidas(int* a , int* b){
 ///FUNCION PARA RECIBIR (LISTA DE DIAS 24HORAS) NOMBRE DE MATERIA HORA 
 void  ubicarMateriaEnHorario(char** listLUN,char** listMAR,char** listMIE,char** listJUE,char** listVIE,char** listSAB,char** listDOM, char* materia,char* dia){
 	int horaInicio=0,horaFinal=0;
+	seleccionarHoras(&horaInicio, &horaFinal);
+	int indiceDia;//se asigna valor para saber a que list_ _ _  usaremos 
 	int opcion;
+	bool flagPosicion=true;
+	bool flaghorasss=true;
 	cout<<endl<<materia<<endl;
-
-	///
+	///ubicamos la lista _ _ _ con indiceDia
+	indiceDia= obtenerNumeroDia(dia);
 	
-	do {
-        cout << "Seleccione Horas\n\t 8-10 [1]\n\t 10-12[2]\n\t 12-14[3]\n\t 14-16[4]\n\t 16-18[5]\n\t Otro[6]\n";
-        cin >> opcion;
-        switch (opcion) {
-            case 1:
-                horaInicio = 8;
-                horaFinal = 10;
-                break;
-            case 2:
-                horaInicio = 10;
-                horaFinal = 12;
-                break;
-            case 3:
-                horaInicio = 12;
-                horaFinal = 14;
-                break;
-            case 4:
-                horaInicio = 14;
-                horaFinal = 16;
-                break;
-            case 5:
-                horaInicio = 16;
-                horaFinal = 18;
-                break;
-            case 6:
-                cout << "Ingrese la hora inicial: ";
-                cin >> horaInicio;
-                cout << "Ingrese la hora final: ";
-                cin >> horaFinal;
-                horasValidas(&horaInicio,&horaFinal);
-                break;
-            default:
-                cout << "Opcion invalida, intente de nuevo." << endl;
-                break;
-        }
-        
-    } while (horaInicio == 0 || horaFinal == 0);
+	///
+	switch (indiceDia){
+		case 1:
+			cout<<"caso 1";
+			agregarPalabra(listLUN,TAM_LISTA ,horaInicio,horaFinal,materia);
+			break;
+		case 2:
+			cout<<"caso 2";
+			while(flaghorasss){
+				flaghorasss=posicionesValidas(listMAR,&horaInicio,&horaFinal);
+			}
+			agregarPalabra(listMAR,TAM_LISTA ,horaInicio,horaFinal,materia);
+			break;
+		case 3:
+			cout<<"caso 3";
+			while(flaghorasss){
+				flaghorasss=posicionesValidas(listMIE,&horaInicio,&horaFinal);
+			}
+			agregarPalabra(listMIE,TAM_LISTA ,horaInicio,horaFinal,materia);
+			break;
+			
+		case 4:
+			cout<<"caso 4";
+			while(flaghorasss){
+				flaghorasss=posicionesValidas(listJUE,&horaInicio,&horaFinal);
+			}
+			agregarPalabra(listJUE,TAM_LISTA ,horaInicio,horaFinal,materia);
+			break;
+		case 5:
+			cout<<"caso 5";
+			while(flaghorasss){
+				flaghorasss=posicionesValidas(listVIE,&horaInicio,&horaFinal);
+			}
+			agregarPalabra(listVIE,TAM_LISTA ,horaInicio,horaFinal,materia);
+			break;
+		case 6:
+			cout<<"caso 6";
+			while(flaghorasss){
+				flaghorasss=posicionesValidas(listSAB,&horaInicio,&horaFinal);
+			}
+			agregarPalabra(listSAB,TAM_LISTA ,horaInicio,horaFinal,materia);
+			break;
+		case 7:
+			cout<<"caso 7";
+			while(flaghorasss){
+				flaghorasss=posicionesValidas(listDOM,&horaInicio,&horaFinal);
+			}
+			agregarPalabra(listDOM,TAM_LISTA ,horaInicio,horaFinal,materia);
+			break;
+	}
     
-    cout << "Hora inicio: " << horaInicio <<endl;
-    cout << "Hora final: " << horaFinal << endl;
     
+    /*
+    int posicion;
+    ///ESPACION DE HORA VALIDAS DISPONIBLE
+    while(flagPosicion){
+    	flagPosicion = false;
+    	copiInicio=horaInicio;
+    	copiFinal= horaFinal;
+    	while(copiInicio< copiFinal){
+    	cout<<copiInicio<<endl;
+    	posicion=copiInicio;
+    	}
+    	
+	}
+    
+    
+    
+    
+    ///se va por las pociciones de inicio hasta fin para cada num escribimos la materia
+    while(horaInicio< horaFinal){
+    	cout<<horaInicio<<endl;
+    	posicion=horaInicio;
+    	int i2=0;
+    	while (materia[i2] != '\0') {
+        listLUN[posicion][i2] = materia[i2];
+        i2++;
+    	}
+    	listLUN[posicion][i2] = '\0';
+    	horaInicio++;
+	}
+    */
     
 	
 	
