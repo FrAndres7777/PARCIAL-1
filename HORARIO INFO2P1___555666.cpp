@@ -120,17 +120,13 @@ int main(){
 	}
     for(int iii = 0 ; iii< numeroMaterias;iii++){
     	contarPalabra(listaMaterias[0][iii]);
-    	/////
     	cout<<" _________________\n";
     	cout<<"||  "<<listaMaterias[0][iii]<<"  ||"<<endl;
     	cout<<" _________________\n\n";
     	
     	
     	int numDias,opcionMatReg;
-		///quite hora inicio y final
-		// UN NUMERO PARA SABER PARA QUE DIA ESTA ITERANDO Y SABER A QUE LIST___ LLENAR
-		int indicadorDiaList;// PENDIENTYE PUEDE DAR UN ERROR
-		//
+		int indicadorDiaList;
 		cout<<"INGRESA DATOS DE MATERIA\n\t   DIAS:\n\t\tMartes-Jueves[1]\n\t\tMiercoles - Viernes[2]\n\t\tHorario Diferente [3]\n";
         cin>>opcionMatReg;
         while(opcionMatReg>3 or opcionMatReg < 1){
@@ -182,9 +178,6 @@ int main(){
 	//PRUEBA DE IMPRESION
    	
 	
-	
-	///////imprimirTodo(listaMAR,TAM_LISTA);
-	///////////////agregarNVeces(listaLUN,11, TAM_PALABRA, TAM_LISTA,sueno);
 	imprimirHORARIO(listaLUN,listaMAR, listaMIE, listaJUE, listaVIE, listaSAB, listaDOM, TAM_LISTA);
 	int horasTotalCreditos=0;
 	for(int cr = 0 ; cr < numeroMaterias;cr++){
@@ -205,22 +198,33 @@ int main(){
 	
 	horasDeEstudio=119-horasvaciasss;
 	cout<<"TUS HORAS DE ESTUDIO SON: "<<horasDeEstudio;
-	cout<<"TE HACEN FALTA :  "<<horasTotalCreditos-horasDeEstudio<<endl;
+	cout<<"  TE HACEN FALTA :   "<<horasTotalCreditos-horasDeEstudio<<endl<<endl;
+	int opcionAcabarTodo;
+	cout<<"  ::: DESEAS QUE COMPLETE TU HORARIO ::: "<<endl;
+	cout<<"\t  PARA AUTOCOMPLETAR [1]\n\t  PARA HACERLO MANUAL INGRESA [2]\n";
+	cout<<"\t  DEJAR ASI [3]";
+	cin>>opcionAcabarTodo;
+	while(opcionAcabarTodo>3 or opcionAcabarTodo<0 ){
+		cout<<"INGRESA OPCION VALIDA ";
+		cin>>opcionAcabarTodo;
+		
+	}
 	
-	cout<<"EL DIA CON MAS ESPACIOS ES "<<endl<<endl;
-	cout<<listaConMasVacios(listaLUN,listaMAR, listaMIE, listaJUE, listaVIE, listaSAB, listaDOM);
-	cout<<" EL DIA CON MAS ESPACIOS ES "<<endl<<endl;
-	
-	for(int i = 0 ,horasRec=0,horasFaltan,horasRegis; i <numeroMaterias; i++){
-		cout<<listaMaterias[0][i]<<"  "<<listaCreditos[i]<<endl;
-		horasRec=(listaCreditos[i]*3);
-		cout<<horasRec<<endl;
-		horasRegis=contarPalabra(listaMaterias[0][i]);
-		horasFaltan=horasRec-horasRegis;
-		cout<<"horas faltante  "<<horasFaltan<<endl;
-		escribirPalabraEnLista(listaLUN,listaMAR,listaMIE,listaJUE,listaVIE,listaSAB,listaDOM,horasFaltan,listaMaterias[0][i]);
+	if(opcionAcabarTodo==1){
+		for(int i = 0 ,horasRec=0,horasFaltan,horasRegis; i <numeroMaterias; i++){
+			cout<<listaMaterias[0][i]<<"  "<<listaCreditos[i]<<endl;
+			horasRec=(listaCreditos[i]*3);
+			cout<<horasRec<<endl;
+			horasRegis=contarPalabra(listaMaterias[0][i]);
+			horasFaltan=horasRec-horasRegis;
+			cout<<"horas faltante  "<<horasFaltan<<endl;
+			escribirPalabraEnLista(listaLUN,listaMAR,listaMIE,listaJUE,listaVIE,listaSAB,listaDOM,horasFaltan,listaMaterias[0][i]);
 		 
-	}cout<<endl;
+	}
+	}else if(opcionAcabarTodo==2){
+		
+	}
+cout<<endl;
 	imprimirHORARIO(listaLUN,listaMAR, listaMIE, listaJUE, listaVIE, listaSAB, listaDOM, TAM_LISTA);
 
 	
