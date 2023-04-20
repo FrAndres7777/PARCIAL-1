@@ -1,4 +1,4 @@
-#include "FUNCIONESPARCIAL1INFO.h"
+#include "FUNCIONESPARCIAL1INFO2.h"
 
 int main(){
 	mainpr();

@@ -176,8 +176,13 @@ void mainpr(){
     
 	}
 	//PRUEBA DE IMPRESION
+	for(int ii = 0 ; ii < numeroMaterias;ii++){
+		cout<<listaMaterias[0][ii]<<"  CREDITOS ";
+		cout<<listaCreditos[ii]<<endl;
+    
+	}
    	
-	cout<<"	 LUNES   MARTES   MIERCOLES	 JUEVES   VIERNES";
+	cout<<"\n	 LUNES   MARTES   MIERCOLES	 JUEVES   VIERNES";
 	cout<<"	SABADO  DOMINGO\n";
 	imprimirHORARIO(listaLUN,listaMAR, listaMIE, listaJUE, listaVIE, listaSAB, listaDOM, TAM_LISTA);
 	int horasTotalCreditos=0;
@@ -215,21 +220,26 @@ void mainpr(){
 		for(int i = 0 ,horasRec=0,horasFaltan,horasRegis; i <numeroMaterias; i++){
 			cout<<listaMaterias[0][i]<<"  "<<listaCreditos[i]<<endl;
 			horasRec=(listaCreditos[i]*3);
-			cout<<horasRec<<endl;
+			//cout<<horasRec<<endl;
 			horasRegis=contarPalabra(listaMaterias[0][i]);
 			horasFaltan=horasRec-horasRegis;
-			cout<<"horas faltante  "<<horasFaltan<<endl;
+			//cout<<"horas faltante  "<<horasFaltan<<endl;
 			escribirPalabraEnLista(listaLUN,listaMAR,listaMIE,listaJUE,listaVIE,listaSAB,listaDOM,horasFaltan,listaMaterias[0][i]);
 		 
 	}
 	}else if(opcionAcabarTodo==2){
 		
 	}
+	
 	cout<<endl;
 	cout<<"	 LUNES   MARTES   MIERCOLES	 JUEVES   VIERNES";
 	cout<<"	SABADO  DOMINGO\n";
 	imprimirHORARIO(listaLUN,listaMAR, listaMIE, listaJUE, listaVIE, listaSAB, listaDOM, TAM_LISTA);
-
+	for(int ii = 0 ; ii < numeroMaterias;ii++){
+		cout<<listaMaterias[0][ii]<<"  CREDITOS ";
+		cout<<listaCreditos[ii]<<endl;
+    
+	}
 	
     ///LIBERAR MEMORIA DANGER
 	liberarLista(listaLUN, TAM_LISTA);
@@ -719,7 +729,6 @@ int  contarPalabra(char* palabra) {
             }
         }
         archivo.close();
-        cout << "La palabra aparece " << contador << " veces en el archivo." << endl;
         return contador;
     } else {
         cout << "No se pudo abrir el archivo." << endl;
