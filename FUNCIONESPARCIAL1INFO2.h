@@ -120,7 +120,7 @@ void mainpr(){
 	}
     for(int iii = 0 ; iii< numeroMaterias;iii++){
     	contarPalabra(listaMaterias[0][iii]);
-    	cout<<" _________________\n";
+    	cout<<"\n\n _________________\n";
     	cout<<"||  "<<listaMaterias[0][iii]<<"  ||"<<endl;
     	cout<<" _________________\n\n";
     	
