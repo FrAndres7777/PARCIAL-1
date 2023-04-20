@@ -48,6 +48,8 @@ int contarPalabra(char* palabra);
 
 void agregarNVeces(char** lista,int veces, int TAM_PALABRA,int TAM_LISTA,char* palabra);
 
+void escribirPalabraEnLista(char** listL, char** listMA, char** listMI, char** listJ, char** listV, char** listS, char** listDOM, int faltantes, char* palabra);
+
 
 
 int main(){
@@ -216,7 +218,10 @@ int main(){
 		horasRegis=contarPalabra(listaMaterias[0][i]);
 		horasFaltan=horasRec-horasRegis;
 		cout<<"horas faltante  "<<horasFaltan<<endl;
-	}
+		escribirPalabraEnLista(listaLUN,listaMAR,listaMIE,listaJUE,listaVIE,listaSAB,listaDOM,horasFaltan,listaMaterias[0][i]);
+		 
+	}cout<<endl;
+	imprimirHORARIO(listaLUN,listaMAR, listaMIE, listaJUE, listaVIE, listaSAB, listaDOM, TAM_LISTA);
 
 	
     ///LIBERAR MEMORIA DANGER
@@ -779,6 +784,120 @@ void agregarNVeces(char** lista,int veces, int TAM_PALABRA,int TAM_LISTA,char* p
 	   }
    }
    	
+}
+
+//agregar veces faltantes
+void escribirPalabraEnLista(char** listLUNES, char** listMARTES, char** listMIERCOLES, char** listJUEVES, char** listVIERNES, char** listSABADO, char** listDOMINGO, int faltantes, char* palabra) {
+    int espaciosTodasListas=0;
+    espaciosTodasListas+=espacioVacios(listLUNES, TAM_LISTA);
+	espaciosTodasListas+=espacioVacios(listMARTES, TAM_LISTA);
+	espaciosTodasListas+=espacioVacios(listMIERCOLES, TAM_LISTA);
+	espaciosTodasListas+=espacioVacios(listJUEVES, TAM_LISTA);
+	espaciosTodasListas+=espacioVacios(listVIERNES, TAM_LISTA);
+	espaciosTodasListas+=espacioVacios(listSABADO, TAM_LISTA);
+	espaciosTodasListas+=espacioVacios(listDOMINGO, TAM_LISTA);
+	if(espaciosTodasListas<faltantes){
+		cout<<"HERMANO CANCELE ALGO  "<<endl;
+		return ;
+	}
+    int indiceListaMasVacios=0;
+	int vacios=0;
+    
+    while (faltantes > 0) {
+    	indiceListaMasVacios = listaConMasVacios(listLUNES, listMARTES, listMIERCOLES, listJUEVES, listVIERNES, listSABADO, listDOMINGO);
+    	switch (indiceListaMasVacios) {
+                case 1:
+                    vacios= espacioVacios(listLUNES, TAM_LISTA);
+                    if(vacios>=faltantes){
+                    	agregarNVeces(listLUNES,faltantes,TAM_PALABRA,TAM_LISTA,palabra);
+                    	faltantes=0;
+                    	
+					}else if(faltantes>vacios){
+						agregarNVeces(listLUNES,vacios,TAM_PALABRA,TAM_LISTA,palabra);
+                    	faltantes=faltantes-vacios;
+						
+					}
+                    break;
+                case 2:
+                	vacios= espacioVacios(listMARTES, TAM_LISTA);
+                    if(vacios>=faltantes){
+                    	agregarNVeces(listMARTES,faltantes,TAM_PALABRA,TAM_LISTA,palabra);
+                    	faltantes=0;
+                    	
+					}else if(faltantes>vacios){
+						agregarNVeces(listMARTES,vacios,TAM_PALABRA,TAM_LISTA,palabra);
+                    	faltantes=faltantes-vacios;
+						
+					}
+                    
+                    break;
+                case 3:vacios= espacioVacios(listMIERCOLES, TAM_LISTA);
+                    if(vacios>=faltantes){
+                    	agregarNVeces(listMIERCOLES,faltantes,TAM_PALABRA,TAM_LISTA,palabra);
+                    	faltantes=0;
+                    	
+					}else if(faltantes>vacios){
+						agregarNVeces(listMIERCOLES,vacios,TAM_PALABRA,TAM_LISTA,palabra);
+                    	faltantes=faltantes-vacios;
+						
+					}
+                    
+                    break;
+                case 4:
+                	vacios= espacioVacios(listJUEVES, TAM_LISTA);
+                    if(vacios>=faltantes){
+                    	agregarNVeces(listJUEVES,faltantes,TAM_PALABRA,TAM_LISTA,palabra);
+                    	faltantes=0;
+                    	
+					}else if(faltantes>vacios){
+						agregarNVeces(listJUEVES,vacios,TAM_PALABRA,TAM_LISTA,palabra);
+                    	faltantes=faltantes-vacios;
+						
+					}
+                    
+                    break;
+                case 5:
+                	vacios= espacioVacios(listVIERNES, TAM_LISTA);
+                    if(vacios>=faltantes){
+                    	agregarNVeces(listVIERNES,faltantes,TAM_PALABRA,TAM_LISTA,palabra);
+                    	faltantes=0;
+                    	
+					}else if(faltantes>vacios){
+						agregarNVeces(listVIERNES,vacios,TAM_PALABRA,TAM_LISTA,palabra);
+                    	faltantes=faltantes-vacios;
+						
+					}
+                    
+                    break;
+                case 6:
+                	vacios= espacioVacios(listSABADO, TAM_LISTA);
+                    if(vacios>=faltantes){
+                    	agregarNVeces(listSABADO,faltantes,TAM_PALABRA,TAM_LISTA,palabra);
+                    	faltantes=0;
+                    	
+					}else if(faltantes>vacios){
+						agregarNVeces(listSABADO,vacios,TAM_PALABRA,TAM_LISTA,palabra);
+                    	faltantes=faltantes-vacios;
+						
+					}
+                    
+                    break;
+                case 7:
+                	vacios= espacioVacios(listDOMINGO, TAM_LISTA);
+                    if(vacios>=faltantes){
+                    	agregarNVeces(listDOMINGO,faltantes,TAM_PALABRA,TAM_LISTA,palabra);
+                    	faltantes=0;
+                    	
+					}else if(faltantes>vacios){
+						agregarNVeces(listDOMINGO,vacios,TAM_PALABRA,TAM_LISTA,palabra);
+                    	faltantes=faltantes-vacios;
+					}
+                    break;
+            }
+        
+        }
+        return;
+    
 }
 
 
