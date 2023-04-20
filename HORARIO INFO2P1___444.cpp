@@ -44,7 +44,9 @@ int espacioVacios(char** listaDia,int TAM_LISTA);
 
 int listaConMasVacios(char** listLUNES,char** listMARTES,char** listMIERCOLES,char** listJUEVES,char** listVIERNES,char** listSABADO,char** listDOMINGO);
 
-void contarPalabra(char* palabra);
+int contarPalabra(char* palabra);
+
+void agregarNVeces(char** lista,int veces, int TAM_PALABRA,int TAM_LISTA,char* palabra);
 
 
 
@@ -73,6 +75,7 @@ int main(){
 	agregarDormir(listaVIE,TAM_LISTA ,horaInicioSueno,horaFinalSueno,sueno);
 	agregarDormir(listaSAB,TAM_LISTA ,horaInicioSueno,horaFinalSueno,sueno);
 	agregarDormir(listaDOM,TAM_LISTA ,horaInicioSueno,horaFinalSueno,sueno);
+	
 	
 	///
 	
@@ -179,6 +182,7 @@ int main(){
 	
 	
 	///////imprimirTodo(listaMAR,TAM_LISTA);
+	///////////////agregarNVeces(listaLUN,11, TAM_PALABRA, TAM_LISTA,sueno);
 	imprimirHORARIO(listaLUN,listaMAR, listaMIE, listaJUE, listaVIE, listaSAB, listaDOM, TAM_LISTA);
 	int horasTotalCreditos=0;
 	for(int cr = 0 ; cr < numeroMaterias;cr++){
@@ -203,7 +207,16 @@ int main(){
 	
 	cout<<"EL DIA CON MAS ESPACIOS ES "<<endl<<endl;
 	cout<<listaConMasVacios(listaLUN,listaMAR, listaMIE, listaJUE, listaVIE, listaSAB, listaDOM);
-	cout<<"EL DIA CON MAS ESPACIOS ES "<<endl<<endl;
+	cout<<" EL DIA CON MAS ESPACIOS ES "<<endl<<endl;
+	
+	for(int i = 0 ,horasRec=0,horasFaltan,horasRegis; i <numeroMaterias; i++){
+		cout<<listaMaterias[0][i]<<"  "<<listaCreditos[i]<<endl;
+		horasRec=(listaCreditos[i]*3);
+		cout<<horasRec<<endl;
+		horasRegis=contarPalabra(listaMaterias[0][i]);
+		horasFaltan=horasRec-horasRegis;
+		cout<<"horas faltante  "<<horasFaltan<<endl;
+	}
 
 	
     ///LIBERAR MEMORIA DANGER
@@ -583,76 +596,80 @@ void  ubicarMateriaEnHorario(char** listLUN,char** listMAR,char** listMIE,char**
 
 // IMPRIMIR LISTA DIA L_M_M_J......
 void imprimirTodo(char** listaDia,int TAM_LISTA){
-	ofstream archivo("RR35.txt", std::ios::app); // abrir el archivo en modo "append"
     
-    if (archivo.is_open()) {
-        
-        
-    } else {
-        cout << "No se pudo abrir el archivo" << std::endl;
-    }
+    
 	 for (int i = 0; i < TAM_LISTA; i++) {
         cout << "Posición " << i << ":";
         if (listaDia[i][0] == '\0') {
             cout << "______";
         } else {
             cout << listaDia[i];
-            archivo << listaDia[i] << endl;
         }
         cout << endl;
     }
-    archivo.close(); // cerrar el archivo
 }
 
 
 void imprimirHORARIO(char** listLUN,char** listMAR,char** listMIE,char** listJUE,char** listVIE,char** listSAB,char** listDOM,int TAM_LISTA){
-
+	 ofstream archivo("RR35.txt"); // abrir el archivo en modo ESCRITURA
+	 if (archivo.is_open()) {
+    } else {
+        cout << "No se pudo abrir el archivo" << std::endl;
+    }	
 	 for (int i = 0; i < TAM_LISTA; i++) {
         cout << "HORA : " << i << ":";
         if (listLUN[i][0] == '\0') {
             cout << "___________   ";
         } else {
             cout << listLUN[i]<<"   ";
+            archivo<<listLUN[i]<<endl;
             
         }
         if (listMAR[i][0] == '\0') {
             cout << "__________   ";
         } else {
             cout << listMAR[i]<<"   ";
+            archivo<<listMAR[i]<<endl;
             
         }
         if (listMIE[i][0] == '\0') {
             cout << "__________   ";
         } else {
             cout << listMIE[i]<<"   ";
+            archivo<<listMIE[i]<<endl;
             
         }
         if (listJUE[i][0] == '\0') {
             cout << "__________   ";
         } else {
             cout << listJUE[i]<<"   ";
+            archivo<<listJUE[i]<<endl;
             
         }
         if (listVIE[i][0] == '\0') {
             cout << "__________   ";
         } else { 
             cout << listVIE[i]<<"   ";
+            archivo<<listVIE[i]<<endl;
             
         }
         if (listSAB[i][0] == '\0') {
             cout << "__________   ";
         } else {
             cout << listSAB[i]<<"   ";
+            archivo<<listSAB[i]<<endl;
             
         }
         if (listDOM[i][0] == '\0') {
             cout << "__________   ";
         } else {
             cout << listDOM[i]<<"   ";
+            archivo<<listDOM[i]<<endl;
             
         }
         cout << endl;
     }
+    archivo.close();
     
 }
 
@@ -666,11 +683,10 @@ int espacioVacios(char** listaDia,int TAM_LISTA){
         	vacios++;
         } 
     }
-    cout<<vacios<<"  ";
     return vacios;
 }
 ///veces que esta materia en horario;
-void contarPalabra(char* palabra) {
+int  contarPalabra(char* palabra) {
     ifstream archivo("RR35.txt");
     if (archivo) {
         int contador = 0;
@@ -692,8 +708,10 @@ void contarPalabra(char* palabra) {
         }
         archivo.close();
         cout << "La palabra aparece " << contador << " veces en el archivo." << endl;
+        return contador;
     } else {
         cout << "No se pudo abrir el archivo." << endl;
+        return -1;
         
     }
 }
@@ -751,7 +769,17 @@ int listaConMasVacios(char** listLUNES,char** listMARTES,char** listMIERCOLES,ch
 
 
 
-
+void agregarNVeces(char** lista,int veces, int TAM_PALABRA,int TAM_LISTA,char* palabra) {
+   int contador=0;
+   for(int i =0; contador<veces and i < TAM_LISTA;i++){
+   	if(lista[i][0]=='\0'){
+   		contador++;
+   		agregarDormir(lista, TAM_LISTA ,i,i+1,palabra);
+   		
+	   }
+   }
+   	
+}
 
 
 
